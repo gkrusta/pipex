@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test2.c                                            :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 16:35:28 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/08/30 16:55:26 by gkrusta          ###   ########.fr       */
+/*   Created: 2023/08/30 10:18:45 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/09/01 12:08:17 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "pipex.h"
 
-int	main()
+int	main(int argc, char **argv)
 {
-	int	fd;
+	int	id;
 
-	fd = open("ex.txt", O_WRONLY | O_CREAT, 0644);
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	printf("This is printed in example.txt!\n");
-
+	id = fork();
+	if (id != 0)
+	{
+		fork();
+		puts("created second fork\n");
+	}
+	printf("abc\n");
 	return (0);
 }
