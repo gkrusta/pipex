@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 17:47:24 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/03 19:03:53 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/03 20:54:31 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,65 @@ char	*path_search(t_pipex p, char **envp)
 	return (p.path);
 }
 
-char	*command_append(t_pipex p, char *cmd1, char **envp)
+char	*command_append(t_pipex p, char *cmd1)
 {
 	int		index;
 	//char	split_result;
-	char	*cmd1_with_slash;
+	//char	*cmd1_with_slash;
 	char	*saver;
 
 	index = 0;
 	p.cmd = ft_split(p.path, ':');
-	cmd1_with_slash = ft_strjoin("/", cmd1);
+	p.cmd1_with_slash = ft_strjoin("/", cmd1);
 	while (p.cmd[index])
 	{
 		saver = p.cmd[index];
-		p.cmd[index] = ft_strjoin(p.cmd[index], cmd1_with_slash);
-/* 		if (execve(p.cmd[index], cmd1_with_slash, envp) == -1)
-			ft_error_msg("Error: "); */
+		p.path = ft_strjoin(p.cmd[index], p.cmd1_with_slash);
 		if (access(p.cmd[index], X_OK) == 0)
-			return (p.cmd[index]);
+			return (p.path);
 		free(saver);
 		index++;
 	}
 	exit (1);
+}
+
+void	child_process(t_pipex p, char **envp)
+{
+	if (dup2(p.infile_fd, STDIN_FILENO) == -1)
+		ft_error_msg("Error: ");
+	if (dup2(p.end[1], STDOUT_FILENO) == -1)
+		ft_error_msg("Error: ");
+	close (p.end[0]);
+	close (p.infile_fd);
+	if (execve(p.path, p.cmd1_with_slash, envp) == -1)
+		ft_msg_error("execve: ");
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_pipex	p;
+
+	if (argc != 5)
+		return (1);
+	p.infile_fd = open(argv[1], O_RDONLY);
+	if (p.infile_fd == -1)
+		return (1);
+	if (access(argv[1], R_OK) == -1)
+		exit (1);
+	pipe(p.end);
+	p.pid = fork();
+	if (p.pid == -1)
+		ft_error_msg("Error: ");
+	path_search(p, envp);
+	command_append(p, argv[2], envp);
+	if (p.pid == 0) // child process
+		child_process(p, envp);
+	else
+	{
+		waitpid
+		parent_process();
+	}
+	return (0);
 }
 
 /* 
@@ -90,43 +127,3 @@ char	**path_search(char * command, char ** envp)
 	}
 }
  */
-
-void	child_process(int infile_fd, char *cmd1, int end[])
-{
-	(void)cmd1;
-	if (dup2(infile_fd, STDIN_FILENO) == -1)
-		ft_error_msg("Error: ");
-	if (dup2(end[1], STDOUT_FILENO) == -1)
-		ft_error_msg("Error: ");
-	close (end[0]);
-	close (infile_fd);
-	execve();
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_pipex	p;
-
-	if (argc != 5)
-		return (1);
-	p.infile_fd = open(argv[1], O_RDONLY);
-	if (p.infile_fd == -1)
-		return (1);
-	if (access(argv[1], R_OK) == -1)
-		exit (1);
-	pipe(p.end);
-	p.pid = fork();
-	if (p.pid == -1)
-		ft_error_msg("Error: ");
-	path_search(p, envp);
-	command_append(p, argv[2], envp);
-	
-	if (pid == 0) // child process
-		child_process(p, argv[2], end);
-	else
-	{
-		waitpid
-		parent_process();
-	}
-	return (0);
-}

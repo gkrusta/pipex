@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 11:28:41 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/03 19:16:16 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/03 19:24:51 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_pipex {
 	int		index;
 	pid_t	pid;
 	char	**cmd;
+	char	*cmd1_with_slash;
 	char	*path;
 }				t_pipex;
 
