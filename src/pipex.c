@@ -32,8 +32,9 @@ int	command_append(t_pipex *p, char *cmd)
 	return (1);
 }
 
-void	second_child_process(t_pipex *p, char **envp)
+void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 {
+	command_append(p, cmd2);
 	close (p->end[1]);
 	if (dup2(p->end[0], STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
@@ -47,8 +48,9 @@ void	second_child_process(t_pipex *p, char **envp)
 	}
 }
 
-void	first_child_process(t_pipex *p, char **envp)
+void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 {
+	command_append(p, cmd1);
 	close (p->end[0]);
 	if (dup2(p->infile_fd, STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
@@ -97,10 +99,10 @@ int	main(int argc, char **argv, char **envp)
 /* 	if (command_append(p, argv[2]) == 1)
 		return (1); */
 	if (p->pid1 == 0) // child process 1 
-		first_child_process(p, envp);
+		first_child_process(p, envp, argv[2]);
 	p->pid2 = fork();
 	if (p->pid2 == 0) // child process 2
-		second_child_process(p, envp);
+		second_child_process(p, envp, argv[3]);
 /* 	else
 	{
 		//wait()

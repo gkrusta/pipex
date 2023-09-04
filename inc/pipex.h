@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 11:28:41 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/04 19:17:08 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/04 19:28:07 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ typedef struct s_pipex {
 /* f */
 void	ft_error_msg(char *str);
 int		command_append(t_pipex *p, char *cmd);
-void	first_child_process(t_pipex *p, char **envp);
-void	parent_process(t_pipex *p, char **envp);
+void	first_child_process(t_pipex *p, char **envp, char *cmd1);
+void	second_child_process(t_pipex *p, char **envp, char *cmd2);
 void	path_search(t_pipex *p, char **envp);
 
 #endif
