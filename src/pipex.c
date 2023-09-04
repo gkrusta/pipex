@@ -1,94 +1,116 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex->c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: gkrusta <gkrusta@student->42malaga->com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 17:47:24 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/03 20:54:31 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/04 16:43:21 by gkrusta          ###   ########->fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*path_search(t_pipex p, char **envp)
-{
-	int	index;
-
-	index = 0;
-	while (envp[index])
-	{
-		if (strncmp(envp[index], "PATH=", 5) == 0)
-		{
-			p.path = envp[index] + 5;
-			break ;
-		}
-		index++;
-	}
-	if (!p.path)
-		ft_error_msg("Error: ");
-	return (p.path);
-}
-
-char	*command_append(t_pipex p, char *cmd1)
+int	command_append(t_pipex *p, char *cmd)
 {
 	int		index;
-	//char	split_result;
-	//char	*cmd1_with_slash;
+	char	*cmd_with_slash;
 	char	*saver;
 
-	index = 0;
-	p.cmd = ft_split(p.path, ':');
-	p.cmd1_with_slash = ft_strjoin("/", cmd1);
-	while (p.cmd[index])
+	index = -1;
+	p->cmd_arg = ft_split(cmd, ' ');
+	cmd_with_slash = ft_strjoin("/", p->cmd_arg[0]);
+	while (p->path[++index])
 	{
-		saver = p.cmd[index];
-		p.path = ft_strjoin(p.cmd[index], p.cmd1_with_slash);
-		if (access(p.cmd[index], X_OK) == 0)
-			return (p.path);
+		saver = p->path[index];
+		p->cmd = ft_strjoin(p->path[index], cmd_with_slash);
+		if (access(p->cmd, X_OK) == 0)
+			return (0);
 		free(saver);
-		index++;
 	}
-	exit (1);
+	return (1);
 }
 
-void	child_process(t_pipex p, char **envp)
+void	second_child_process(t_pipex *p, char **envp)
 {
-	if (dup2(p.infile_fd, STDIN_FILENO) == -1)
+	close (p->end[1]);
+	if (dup2(p->end[0], STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
-	if (dup2(p.end[1], STDOUT_FILENO) == -1)
+	if (dup2(p->outfile_fd, STDOUT_FILENO) == -1)
 		ft_error_msg("Error: ");
-	close (p.end[0]);
-	close (p.infile_fd);
-	if (execve(p.path, p.cmd1_with_slash, envp) == -1)
-		ft_msg_error("execve: ");
+	close (p->end[0]);
+	close (p->infile_fd);
+	if (execve(p->cmd, p->cmd_arg, envp) == -1)
+	{
+		ft_error_msg("Execve: ");
+	}
 }
+
+void	first_child_process(t_pipex *p, char **envp)
+{
+	close (p->end[0]);
+	if (dup2(p->infile_fd, STDIN_FILENO) == -1)
+		ft_error_msg("Error: ");
+	if (dup2(p->end[1], STDOUT_FILENO) == -1)
+		ft_error_msg("Error: ");
+	close (p->end[1]);
+	close (p->infile_fd);
+	if (execve(p->cmd, p->cmd_arg, envp) == -1)
+	{
+		ft_error_msg("Execve: ");
+	}
+} 
+
+/* ls -l
+split_result = ["ls", "-l", NULL];
+arg = ["/bin/ls", "-l", NULL];
+
+arg[0] = "/bin/ls";
+arg[1] = "-l"
+arg[2] = NULL;
+char * const * arg;
+execve (arg[0], arg, envp);
+ */
+
+//void	processes()
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_pipex	p;
+	t_pipex	*p;
 
-	if (argc != 5)
+/* 	if (argc != 5)
+		return (1); */
+		(void)argc;
+	p = malloc(sizeof(t_pipex));
+	p->infile_fd = open(argv[1], O_RDONLY, 0444);
+	p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (p->infile_fd == -1 || p->outfile_fd == -1)
 		return (1);
-	p.infile_fd = open(argv[1], O_RDONLY);
-	if (p.infile_fd == -1)
-		return (1);
-	if (access(argv[1], R_OK) == -1)
-		exit (1);
-	pipe(p.end);
-	p.pid = fork();
-	if (p.pid == -1)
+	if (access(argv[1], R_OK) == -1 || access(argv[4], W_OK) == -1)
+		ft_error_msg("Error: ");
+	pipe(p->end);
+	p->pid1 = fork();
+	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
 	path_search(p, envp);
-	command_append(p, argv[2], envp);
-	if (p.pid == 0) // child process
-		child_process(p, envp);
-	else
+/* 	if (command_append(p, argv[2]) == 1)
+		return (1); */
+	if (p->pid1 == 0) // child process 1 
+		first_child_process(p, envp);
+	p->pid2 = fork();
+	if (p->pid2 == 0) // child process 2
+		second_child_process(p, envp);
+/* 	else
 	{
-		waitpid
+		//wait()
+		//read into the pipe the output of execve
+		p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (access(argv[4], R_OK) == -1)
+			ft_error_msg("Error: ");
 		parent_process();
-	}
+		exit (1);
+	} */
 	return (0);
 }
 
