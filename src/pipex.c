@@ -52,6 +52,7 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 {
 	command_append(p, cmd1);
 	close (p->end[0]);
+	//if argv[1] its not here__doc ->
 	if (dup2(p->infile_fd, STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
 	if (dup2(p->end[1], STDOUT_FILENO) == -1)
@@ -74,16 +75,20 @@ arg[2] = NULL;
 char * const * arg;
 execve (arg[0], arg, envp);
  */
-
 //void	processes()
 
+void ft_leaks(void)
+ {
+    system("leaks -q pipex");
+}
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*p;
 
+	atexit(ft_leaks);
 /* 	if (argc != 5)
 		return (1); */
-		(void)argc;
+	(void)argc;
 	p = malloc(sizeof(t_pipex));
 	p->infile_fd = open(argv[1], O_RDONLY, 0444);
 	p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -92,20 +97,27 @@ int	main(int argc, char **argv, char **envp)
 	if (access(argv[1], R_OK) == -1 || access(argv[4], W_OK) == -1)
 		ft_error_msg("Error: ");
 	pipe(p->end);
+	path_search(p, envp);
 	p->pid1 = fork();
 	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
-	path_search(p, envp);
-/* 	if (command_append(p, argv[2]) == 1)
-		return (1); */
+	printf("pid 1 is %d\n\n", p->pid1);
 	if (p->pid1 == 0) // child process 1 
 		first_child_process(p, envp, argv[2]);
+	waitpid(p->pid1, NULL, 0);
 	p->pid2 = fork();
+	printf("pid 2 is %d\n\n", p->pid2);
+	if (p->pid1 == -1)
+		ft_error_msg("Error: ");
 	if (p->pid2 == 0) // child process 2
 		second_child_process(p, envp, argv[3]);
+	waitpid(p->pid2, NULL, 0);
+	printf("pid 1 is %d and pid 2 is %d \n", p->pid1, p->pid2);
+	ft_free_argv(p);
 /* 	else
 	{
-		//wait()
+		int	*status = 0;
+		//wait(NULL)
 		//read into the pipe the output of execve
 		p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (access(argv[4], R_OK) == -1)
@@ -113,41 +125,8 @@ int	main(int argc, char **argv, char **envp)
 		parent_process();
 		exit (1);
 	} */
+/* 	waitpid(p->pid1, &p->status, 0);
+	waitpid(p->pid2, &p->status, 0); */
+	free(p);
 	return (0);
 }
-
-/* 
-char	**path_search(char * command, char ** envp)
-{
-	char ** split_result;
-	unsigned int index = 0;
-	char * path;
-
-	envp == char **
-	envp[index] == char *
-	while (envp[index])
-	{
-		if (envp[index] == "PATH=")
-		{
-			path = envp[index];
-			break ;
-		}
-		index++;
-	}
-	path = ft_substr (path, 5, strlen(path));
-	
-	index = 0;
-	split_result = ft_split (path, ':');
-	char * command_with_slash = ft_strjoin ("/", command );
-	char * saver;
-	while (split_result[index])
-	{
-		saver = split_result[index];
-		
-		split_result[index] = strjoin (split_result[index], command_with_slash);
-		
-		free (saver);
-		index++;
-	}
-}
- */
