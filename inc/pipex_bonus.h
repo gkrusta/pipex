@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/01 11:28:41 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/06 12:44:20 by gkrusta          ###   ########.fr       */
+/*   Created: 2023/09/06 12:04:22 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/09/06 12:06:16 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "../libft/libft.h"
 
@@ -32,7 +32,6 @@ typedef struct s_pipex {
 void	ft_error_msg(char *str);
 void	ft_free_argv(t_pipex *p);
 void	path_search(t_pipex *p, char **envp);
-void	close_pipes(t_pipex *p);
 
 
 int		command_append(t_pipex *p, char *cmd);

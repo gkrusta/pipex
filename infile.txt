@@ -1,5 +1,0 @@
-This is printed in example.txt!
-12345
-123
-.....
-fdfgd

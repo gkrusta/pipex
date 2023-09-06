@@ -6,11 +6,13 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 17:46:13 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/05 16:59:22 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/06 13:29:09 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+
 
 void	path_search(t_pipex *p, char **envp)
 {
@@ -30,15 +32,14 @@ void	path_search(t_pipex *p, char **envp)
 	if (!envp_path)
 		ft_error_msg("Error: ");
 	p->path = ft_split(envp_path, ':');
-	
 }
 
 void	ft_free_argv(t_pipex *p)
 {
-	
 	while (p->index-- > 0)
 		free (p->path[p->index]);
 	free (p->path);
+	free (p);
 }
 
 void	ft_error_msg(char *str)
