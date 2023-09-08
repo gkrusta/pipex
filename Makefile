@@ -6,7 +6,7 @@
 #    By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/01 11:07:54 by gkrusta           #+#    #+#              #
-#    Updated: 2023/09/07 16:35:56 by gkrusta          ###   ########.fr        #
+#    Updated: 2023/09/08 14:51:44 by gkrusta          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 NAME_BONUS = pipex_bonus
 
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 LIBFT = libft/libft.a
 HEADERS = -I ./inc -I ./libft
@@ -23,7 +23,7 @@ SRCS = $(wildcard src/*.c)
 SRCS_BONUS = $(wildcard src_bonus/*.c)
 
 OBJS = $(SRCS:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.OBJS_BONUS)
+OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
 all: $(LIBFT) $(NAME) 
 
@@ -36,7 +36,7 @@ bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS)
 	@ echo "\033[32mCompiling Pipex BONUS...\n"
-	@$(CC) $(FLAGS) $(OBJS_BOUNS) $(LIBFT) $(HEADERS) -o $@
+	@$(CC) $(FLAGS) $(OBJS_BONUS) $(LIBFT) $(HEADERS) -o $@
 	@ echo "\n\t\t\033[32mCompiled!\n"
 
 %.o: %.c
