@@ -26,10 +26,7 @@ int	command_append(t_pipex *p, char *cmd)
 		saver = p->path[index];
 		p->cmd = ft_strjoin(p->path[index], cmd_with_slash);
 		if (access(p->cmd, X_OK) == 0)
-		{
-			
 			return (0);
-		}
 		free(saver);
 	}
 	return (1);
@@ -37,6 +34,7 @@ int	command_append(t_pipex *p, char *cmd)
 
 void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 {
+	waitpid(-1, NULL, 0);
 	command_append(p, cmd2);
 	close (p->end[1]);
 	if (dup2(p->end[0], STDIN_FILENO) == -1)
@@ -44,7 +42,7 @@ void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 	if (dup2(p->outfile_fd, STDOUT_FILENO) == -1)
 		ft_error_msg("Error: ");
 	close (p->end[0]);
-	close (p->infile_fd);
+	close (p->outfile_fd);
 	if (execve(p->cmd, p->cmd_arg, envp) == -1)
 	{
 		ft_error_msg("Execve: ");
@@ -68,11 +66,11 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 	}
 }
 
-/* void ft_leaks(void)
+void ft_leaks(void)
 {
 	system("leaks -q pipex");
 
-} */
+}
 
 void	pipex(t_pipex *p, char **cmd, char **envp)
 {
@@ -87,32 +85,51 @@ void	pipex(t_pipex *p, char **cmd, char **envp)
 	printf("pid 1 is %d\n\n", p->pid1);
 	if (p->pid1 == 0) // child process 1 
 		first_child_process(p, envp, cmd[2]);
-	//waitpid(p->pid1, NULL, 0);
+	waitpid(p->pid1, NULL, WNOHANG);
 	p->pid2 = fork();
 	printf("pid 2 is %d\n\n", p->pid2);
 	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
 	if (p->pid2 == 0) // child process 2
 		second_child_process(p, envp, cmd[3]);
-	//close_pipes(t_pipex *p);
-	//waitpid(p->pid2, NULL, 0);
-	printf("pid 1 is %d and pid 2 is %d \n", p->pid1, p->pid2);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*p;
 
-	//atexit(ft_leaks);
+	atexit(ft_leaks);
 
-	(void)argc;
-	p = malloc(sizeof(t_pipex));
-	p->infile_fd = open(argv[1], O_RDONLY, 0444);
-	p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	path_search(p, envp);
-	pipex(p, argv, envp);
-	//waitpid(p->pid1, NULL, 0);
-	//waitpid(p->pid2, NULL, 0);
-	ft_free_argv(p);
+	if (argc == 5)
+	{
+		p = malloc(sizeof(t_pipex));
+		p->infile_fd = open(argv[1], O_RDONLY, 0444);
+		p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		path_search(p, envp);
+		pipex(p, argv, envp);
+		waitpid(-1, NULL, 0);
+		puts("end\n");
+		ft_free_argv(p);
+	}
 	return (0);
 }
+
+/* void	set_waitpid(t_pipex *p, char *cmd)
+{
+	if (strncmp(cmd, "cat /dev/random", 15) == 0
+		|| strncmp(cmd, "yes", 3) == 0
+			|| strncmp(cmd, "sleep", 5) == 0)
+				waitpid(p->pid1, NULL, WNOHANG);
+	else
+		waitpid(p->pid1, NULL, 0);
+}
+
+void	set_waitpid2(t_pipex *p, char *cmd)
+{
+	if (strncmp(cmd, "cat /dev/random", 15) == 0
+		|| strncmp(cmd, "yes", 3) == 0
+			|| strncmp(cmd, "sleep", 5) == 0)
+				waitpid(p->pid2, NULL, 0);
+	else
+		waitpid(p->pid2, NULL, 0);
+} */

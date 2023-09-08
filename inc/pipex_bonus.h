@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:04:22 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/06 12:06:16 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/07 15:47:43 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 typedef struct s_pipex {
 	int		infile_fd;
 	int		outfile_fd;
+	int		pipes;
 	int		status;
 	int		end[2];
 	int		index;
