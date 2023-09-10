@@ -44,9 +44,7 @@ void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 	close (p->end[0]);
 	close (p->outfile_fd);
 	if (execve(p->cmd, p->cmd_arg, envp) == -1)
-	{
 		ft_error_msg("Execve: ");
-	}
 }
 
 void	first_child_process(t_pipex *p, char **envp, char *cmd1)
@@ -61,9 +59,7 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 	close (p->end[1]);
 	close (p->infile_fd);
 	if (execve(p->cmd, p->cmd_arg, envp) == -1)
-	{
 		ft_error_msg("Execve: ");
-	}
 }
 
 void ft_leaks(void)
