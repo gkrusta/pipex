@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:04:22 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/10 17:55:34 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/11 12:10:43 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,8 @@ void	path_search(t_pipex *p, char **envp);
 
 
 int		command_append(t_pipex *p, char *cmd);
+
+/* here doc */
+void	here_doc(t_pipex *p, char **file);
 
 #endif

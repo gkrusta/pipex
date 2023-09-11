@@ -6,7 +6,7 @@
 #    By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/01 11:07:54 by gkrusta           #+#    #+#              #
-#    Updated: 2023/09/09 19:56:09 by gkrusta          ###   ########.fr        #
+#    Updated: 2023/09/11 13:16:13 by gkrusta          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 NAME_BONUS = pipex_bonus
 
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -g 
+FLAGS = -Wall -Wextra -Werror -g
 
 LIBFT = libft/libft.a
 HEADERS = -I ./inc -I ./libft

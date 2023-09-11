@@ -51,7 +51,6 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 {
 	command_append(p, cmd1);
 	close (p->end[0]);
-	//if argv[1] its not here__doc ->
 	if (dup2(p->infile_fd, STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
 	if (dup2(p->end[1], STDOUT_FILENO) == -1)
