@@ -6,11 +6,32 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:03:58 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/11 12:31:53 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/11 13:23:54 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	openfile(t_pipex *p, char **file, int argc)
+{
+	if (strncmp(file[1], "here_doc", 9) == 0)
+	{
+		here_doc(p, file);
+		if (dup2(p->end[0], STDIN_FILENO) == -1)
+			ft_error_msg("Dup2: ");
+		close (p->end[0]);
+		p->i = 3;
+	}
+	else
+	{
+		p->infile_fd = open(file[1], O_RDONLY, 0444);
+		if (dup2(p->infile_fd, STDIN_FILENO) == -1)
+			ft_error_msg("Dup2: ");
+		close (p->infile_fd);
+		p->i = 2;
+	}
+	p->outfile_fd = open(file[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+}
 
 int	command_append(t_pipex *p, char *cmd)
 {

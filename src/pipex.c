@@ -12,26 +12,6 @@
 
 #include "pipex.h"
 
-int	command_append(t_pipex *p, char *cmd)
-{
-	int		index;
-	char	*cmd_with_slash;
-	char	*saver;
-
-	index = -1;
-	p->cmd_arg = ft_split(cmd, ' ');
-	cmd_with_slash = ft_strjoin("/", p->cmd_arg[0]);
-	while (p->path[++index])
-	{
-		saver = p->path[index];
-		p->cmd = ft_strjoin(p->path[index], cmd_with_slash);
-		if (access(p->cmd, X_OK) == 0)
-			return (0);
-		free(saver);
-	}
-	return (1);
-}
-
 void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 {
 	waitpid(-1, NULL, 0);
@@ -108,23 +88,3 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
-
-/* void	set_waitpid(t_pipex *p, char *cmd)
-{
-	if (strncmp(cmd, "cat /dev/random", 15) == 0
-		|| strncmp(cmd, "yes", 3) == 0
-			|| strncmp(cmd, "sleep", 5) == 0)
-				waitpid(p->pid1, NULL, WNOHANG);
-	else
-		waitpid(p->pid1, NULL, 0);
-}
-
-void	set_waitpid2(t_pipex *p, char *cmd)
-{
-	if (strncmp(cmd, "cat /dev/random", 15) == 0
-		|| strncmp(cmd, "yes", 3) == 0
-			|| strncmp(cmd, "sleep", 5) == 0)
-				waitpid(p->pid2, NULL, 0);
-	else
-		waitpid(p->pid2, NULL, 0);
-} */
