@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:04:22 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/11 12:10:43 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/17 14:54:24 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,18 @@ typedef struct s_pipex {
 	char	**cmd_arg;
 }				t_pipex;
 
+/* piping process & forking */
+void	pipex_bonus(t_pipex *p, char **argv, char **envp, int argc);
+
+
+/* here doc */
+void	here_doc(t_pipex *p, char **file);
+
 /* utils */
 void	ft_error_msg(char *str);
 void	ft_free_argv(t_pipex *p);
 void	path_search(t_pipex *p, char **envp);
-
-
+void	openfile(t_pipex *p, char **file, int argc);
 int		command_append(t_pipex *p, char *cmd);
-
-/* here doc */
-void	here_doc(t_pipex *p, char **file);
 
 #endif

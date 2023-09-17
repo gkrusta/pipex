@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex->c                                            :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkrusta <gkrusta@student->42malaga->com>     +#+  +:+       +#+        */
+/*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 17:47:24 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/04 16:43:21 by gkrusta          ###   ########->fr       */
+/*   Created: 2023/09/06 12:03:58 by gkrusta           #+#    #+#             */
+/*   Updated: 2023/09/17 17:08:01 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,23 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 		ft_error_msg("Execve: ");
 }
 
-void ft_leaks(void)
+/* void	ft_leaks(void)
 {
 	system("leaks -q pipex");
-
-}
+} */
 
 void	pipex(t_pipex *p, char **cmd, char **envp)
 {
-	if (p->infile_fd == -1 || p->outfile_fd == -1)
-		ft_error_msg("Error: ");
 	if (access(cmd[1], R_OK) == -1 || access(cmd[4], W_OK) == -1)
 		ft_error_msg("Error: ");
 	pipe(p->end);
 	p->pid1 = fork();
 	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
-	printf("pid 1 is %d\n\n", p->pid1);
 	if (p->pid1 == 0) // child process 1 
 		first_child_process(p, envp, cmd[2]);
 	waitpid(p->pid1, NULL, WNOHANG);
 	p->pid2 = fork();
-	printf("pid 2 is %d\n\n", p->pid2);
 	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
 	if (p->pid2 == 0) // child process 2
@@ -73,17 +68,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*p;
 
-	atexit(ft_leaks);
-
-	if (argc == 5)
+	//atexit(ft_leaks);
+	if (argc < 5)
+		exit (1);
+	else if (argc == 5)
 	{
 		p = malloc(sizeof(t_pipex));
-		p->infile_fd = open(argv[1], O_RDONLY, 0444);
-		p->outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		openfile(p, argv);
 		path_search(p, envp);
 		pipex(p, argv, envp);
 		waitpid(-1, NULL, 0);
-		puts("end\n");
 		ft_free_argv(p);
 	}
 	return (0);

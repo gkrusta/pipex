@@ -6,18 +6,18 @@
 #    By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/01 11:07:54 by gkrusta           #+#    #+#              #
-#    Updated: 2023/09/11 13:16:13 by gkrusta          ###   ########.fr        #
+#    Updated: 2023/09/17 16:48:35 by gkrusta          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 NAME_BONUS = pipex_bonus
+LIBFT = libft/libft.a
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror -g
 
-LIBFT = libft/libft.a
-HEADERS = -I ./inc -I ./libft
+HEADERS = -I./inc -I./libft
 
 SRCS = $(wildcard src/*.c)
 SRCS_BONUS = $(wildcard src_bonus/*.c)
@@ -34,7 +34,7 @@ $(NAME): $(OBJS)
 
 bonus: $(NAME_BONUS)
 
-$(NAME_BONUS): $(OBJS_BONUS)
+$(NAME_BONUS): $(LIBFT) $(OBJS_BONUS)
 	@ echo "\033[32mCompiling Pipex BONUS...\n"
 	@$(CC) $(FLAGS) $(OBJS_BONUS) $(LIBFT) $(HEADERS) -o $@
 	@ echo "\n\t\t\033[32mCompiled!\n"
@@ -55,7 +55,7 @@ clean:
 
 fclean: clean
 	@ $(RM) $(NAME) $(NAME_BONUS)
-	@ make -C libft fclean
+	@ $(MAKE) -C libft fclean
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:03:55 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/13 08:43:35 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/17 17:02:25 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	middle_child(t_pipex *p)
 void	last_process(t_pipex *p, char **envp, char *cmd_last)
 {
 	pid_t	pid;
-	
+
 	pid = fork();
 	if (pid == 0)
 	{
@@ -37,14 +37,14 @@ void	last_process(t_pipex *p, char **envp, char *cmd_last)
 	else
 	{
 		waitpid(pid, NULL, WNOHANG);
-			middle_child(p);
+		middle_child(p);
 	}
 }
 
-void	ft_leaks(void)
+/* void	ft_leaks(void)
 {
 	system("leaks -q pipex_bonus");
-}
+} */
 
 void	pipex_bonus(t_pipex *p, char **argv, char **envp, int argc)
 {
@@ -81,7 +81,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*p;
 
-	atexit(ft_leaks);
+	//atexit(ft_leaks);
 
 	p = malloc(sizeof(t_pipex));
 	if (argc > 4)
@@ -91,7 +91,6 @@ int	main(int argc, char **argv, char **envp)
 		pipex_bonus(p, argv, envp, argc);
 		waitpid(-1, NULL, 0);
 	}
-	printf("end\n");
 	ft_free_argv(p);
 	return (0);
 }
