@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 17:46:13 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 17:08:18 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/17 20:58:11 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	command_append(t_pipex *p, char *cmd)
 			return (0);
 		free(saver);
 	}
-	free(cmd_with_slash);
+	//free(cmd_with_slash);
 	return (1);
 }
 
@@ -81,10 +81,4 @@ void	ft_free_argv(t_pipex *p)
 	}
 	free (p->cmd_arg);
 	free (p);
-}
-
-void	ft_error_msg(char *str)
-{
-	perror(str);
-	exit(1);
 }

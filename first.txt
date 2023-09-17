@@ -1,1 +1,0 @@
-PATH=/Users/gkrusta/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/usr/local/munki:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/gkrusta/.brew/bin

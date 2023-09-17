@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:03:58 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 14:46:30 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/17 21:04:45 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,4 @@ void	ft_free_argv(t_pipex *p)
 		free (p->path[p->index]);
 	free (p->path);
 	free (p);
-}
-
-void	ft_error_msg(char *str)
-{
-	perror(str);
-	exit (1);
 }

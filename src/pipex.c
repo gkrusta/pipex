@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:03:58 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 17:08:01 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/17 20:56:40 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 {
 	waitpid(-1, NULL, 0);
-	command_append(p, cmd2);
+	if (command_append(p, cmd2) == 1)
+		command_not_found(cmd2);
 	close (p->end[1]);
 	if (dup2(p->end[0], STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
@@ -29,7 +30,8 @@ void	second_child_process(t_pipex *p, char **envp, char *cmd2)
 
 void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 {
-	command_append(p, cmd1);
+	if (command_append(p, cmd1) == 1)
+		command_not_found(cmd1);
 	close (p->end[0]);
 	if (dup2(p->infile_fd, STDIN_FILENO) == -1)
 		ft_error_msg("Error: ");
@@ -58,7 +60,7 @@ void	pipex(t_pipex *p, char **cmd, char **envp)
 		first_child_process(p, envp, cmd[2]);
 	waitpid(p->pid1, NULL, WNOHANG);
 	p->pid2 = fork();
-	if (p->pid1 == -1)
+	if (p->pid2 == -1)
 		ft_error_msg("Error: ");
 	if (p->pid2 == 0) // child process 2
 		second_child_process(p, envp, cmd[3]);
@@ -69,9 +71,9 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	*p;
 
 	//atexit(ft_leaks);
-	if (argc < 5)
-		exit (1);
-	else if (argc == 5)
+	if (argc != 5)
+		exit(1);
+	else
 	{
 		p = malloc(sizeof(t_pipex));
 		openfile(p, argv);
