@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:04:22 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 21:04:05 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/18 15:15:07 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@
 # include "../libft/libft.h"
 
 typedef struct s_pipex {
+	pid_t	pid;
 	int		infile_fd;
 	int		outfile_fd;
-	int		status;
 	int		end[2];
-	int		index;
 	int		i;
-	int		cmds;
 	char	*cmd;
 	char	**path;
 	char	**cmd_arg;
@@ -30,7 +28,8 @@ typedef struct s_pipex {
 
 /* piping process & forking */
 void	pipex_bonus(t_pipex *p, char **argv, char **envp, int argc);
-
+void	last_process(t_pipex *p, char **envp, char *cmd_last);
+void	parent_process(t_pipex *p);
 
 /* here doc */
 void	here_doc(t_pipex *p, char **file);

@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:03:58 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 20:56:40 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/18 14:41:21 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ void	first_child_process(t_pipex *p, char **envp, char *cmd1)
 		ft_error_msg("Execve: ");
 }
 
-/* void	ft_leaks(void)
-{
-	system("leaks -q pipex");
-} */
-
 void	pipex(t_pipex *p, char **cmd, char **envp)
 {
 	if (access(cmd[1], R_OK) == -1 || access(cmd[4], W_OK) == -1)
@@ -56,13 +51,13 @@ void	pipex(t_pipex *p, char **cmd, char **envp)
 	p->pid1 = fork();
 	if (p->pid1 == -1)
 		ft_error_msg("Error: ");
-	if (p->pid1 == 0) // child process 1 
+	if (p->pid1 == 0)
 		first_child_process(p, envp, cmd[2]);
 	waitpid(p->pid1, NULL, WNOHANG);
 	p->pid2 = fork();
 	if (p->pid2 == -1)
 		ft_error_msg("Error: ");
-	if (p->pid2 == 0) // child process 2
+	if (p->pid2 == 0)
 		second_child_process(p, envp, cmd[3]);
 }
 
@@ -70,7 +65,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*p;
 
-	//atexit(ft_leaks);
 	if (argc != 5)
 		exit(1);
 	else

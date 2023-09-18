@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:18:41 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/11 12:09:57 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/18 14:34:00 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	here_doc(t_pipex *p, char **file)
 	while (1)
 	{
 		line = get_next_line(0);
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 10)
 		{
 			free (line);
 			break ;

@@ -6,7 +6,7 @@
 /*   By: gkrusta <gkrusta@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 17:46:13 by gkrusta           #+#    #+#             */
-/*   Updated: 2023/09/17 20:58:11 by gkrusta          ###   ########.fr       */
+/*   Updated: 2023/09/18 14:39:27 by gkrusta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	command_append(t_pipex *p, char *cmd)
 			return (0);
 		free(saver);
 	}
-	//free(cmd_with_slash);
 	return (1);
 }
 
