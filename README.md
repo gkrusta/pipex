@@ -46,7 +46,7 @@ It then pipes the output of cmd and cmd1 to outfile. This mimics the behavior of
 - Behavior of pipes, forks, dup2 and execve funcitons:
   https://www.rozmichelle.com/pipes-forks-dups/
   
-- This tutorial mainipulates each command in seperate childd process (the example I followed)
+- This tutorial mainipulates each command in seperate childd process (the example I followed):
   https://csnotes.medium.com/pipex-tutorial-42-project-4469f5dd5901
   
 - This processes the first command in child process and continues with the second command in the parent process, creating fork just once:
