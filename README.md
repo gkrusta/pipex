@@ -10,9 +10,7 @@ To use Pipex, follow these steps:
 
 1. Clone the repository:
 
-   ```shell
-   git clone https://github.com/yourusername/pipex.git
-   cd pipex
+   git clone https://github.com/gkrusta/pipex.git
 
 2. Compile the program:
 
