@@ -6,6 +6,8 @@ Pipex reproduces the behavior of the shell pipe command in C.
 
 ## Usage
 
+Lomik
+
 To use Pipex, follow these steps:
 
 1. Clone the repository:
